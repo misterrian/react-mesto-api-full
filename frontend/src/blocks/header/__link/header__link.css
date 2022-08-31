@@ -1,0 +1,11 @@
+.header__link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 400;
+  cursor: pointer;
+  padding-left: 24px;
+}
+
+.header__link:hover {
+  opacity: 0.6;
+}

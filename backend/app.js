@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 
 require('dotenv').config();
@@ -17,6 +18,8 @@ const routes = require('./routes');
 const { errorsHandler } = require('./middlewares/errors');
 
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
