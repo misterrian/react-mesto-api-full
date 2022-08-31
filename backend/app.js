@@ -27,13 +27,6 @@ mongoose.connect(MONGODB, {
 app.use(requestLogger);
 app.use(routes);
 
-// Данный код нужен только для проверки восстановления работы сервера после падения
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 app.use(errorLogger);
 app.use(errors());
 app.use(errorsHandler);

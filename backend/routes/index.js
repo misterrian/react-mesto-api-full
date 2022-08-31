@@ -10,6 +10,13 @@ const NotFoundError = require('../errors/not-found-error');
 router.post('/signin', loginValidator, login);
 router.post('/signup', createUserValidator, createUser);
 
+// Данный код нужен только для проверки восстановления работы сервера после падения
+router.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 router.use(auth);
 
 router.get('/signout', signout);
