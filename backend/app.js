@@ -1,6 +1,7 @@
 const {
   PORT = 3000,
   MONGODB = 'mongodb://localhost:27017/mestodb',
+  NODE_ENV = 'dev',
 } = process.env;
 
 const express = require('express');
@@ -24,10 +25,17 @@ mongoose.connect(MONGODB, {
 app.use(requestLogger);
 app.use(routes);
 
+// Данный код нужен только для проверки восстановления работы сервера после падения
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.use(errorLogger);
 app.use(errors());
 app.use(errorsHandler);
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+  console.log(`App listening on port ${PORT} in ${NODE_ENV} mode`);
 });

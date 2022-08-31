@@ -15,6 +15,10 @@ const UnauthorizedError = require('../errors/unauthorized-error');
 const ConflictError = require('../errors/conflict-error');
 const InternalServerError = require('../errors/internal-server-error');
 
+const { defaultSecretKey } = require('../utils/utils');
+
+const { JWT_SECRET = defaultSecretKey } = process.env;
+
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -22,7 +26,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        'some-secret-key',
+        JWT_SECRET,
         { expiresIn: '7d' },
       );
 
