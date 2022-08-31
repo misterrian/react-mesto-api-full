@@ -9,8 +9,8 @@ node_modules
 # Optional npm cache directory
 .npm
 
-# Production settings
-*.env
+# Application settings
+.env
 
 # Optional REPL history
 .DS_Store

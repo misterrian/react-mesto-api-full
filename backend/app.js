@@ -1,14 +1,16 @@
-const {
-  PORT = 3000,
-  MONGODB = 'mongodb://localhost:27017/mestodb',
-  NODE_ENV = 'dev',
-} = process.env;
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+
+require('dotenv').config();
+
+const {
+  PORT = 3000,
+  MONGODB = 'mongodb://localhost:27017/mestodb',
+  NODE_ENV = 'dev',
+} = process.env;
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
