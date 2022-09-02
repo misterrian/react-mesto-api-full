@@ -19,7 +19,24 @@ const { errorsHandler } = require('./middlewares/errors');
 
 const app = express();
 
-app.use(cors());
+const whitelist = [
+  'http://misterrian.mesto.nomoredomains.sbs',
+  'https://misterrian.mesto.nomoredomains.sbs',
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
+
+app.use(cors({
+  origin(origin, callback) {
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 

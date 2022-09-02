@@ -19,7 +19,6 @@ import errorImage from "../images/error.svg";
 import successImage from "../images/success.svg";
 
 export default function App() {
-    const [token, setToken] = React.useState(null);
     const [email, setEmail] = React.useState('');
     const [currentUser, setCurrentUser] = React.useState(defaultCurrentUser);
     const [cards, setCards] = React.useState([]);
@@ -34,29 +33,22 @@ export default function App() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            apiAuth.checkToken(token)
-                .then(res => {
-                    setToken(token);
-                    setEmail(res.data.email);
-                    navigate("/");
-                })
-                .catch(err => console.log(err));
-        }
+        api.getUserInfo()
+            .then(userData => {
+                setCurrentUser(userData);
+                setEmail(userData.email);
+                navigate("/");
+            })
+            .catch(err => console.log(err));
     }, [navigate]);
 
     React.useEffect(() => {
-        if (token) {
-            api.getUserInfo()
-                .then(userData => setCurrentUser(userData))
-                .catch(error => console.log(error));
-
+        if (currentUser._id) {
             api.getInitialCards()
                 .then(response => setCards(response))
                 .catch(error => console.log(error));
         }
-    }, [token]);
+    }, [currentUser]);
 
     const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
     const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
@@ -133,8 +125,9 @@ export default function App() {
     }
 
     function handleExitClick() {
-        setToken(null);
-        localStorage.removeItem("token");
+        apiAuth.signout()
+            .then(() => setCurrentUser(defaultCurrentUser))
+            .catch(error => console.log(error));
     }
 
     function handleRegister(user) {
@@ -155,11 +148,7 @@ export default function App() {
 
     function handleLogin(loginInfo) {
         apiAuth.signin(loginInfo)
-            .then(res => {
-                localStorage.setItem("token", res.token);
-                setToken(res.token);
-                navigate("/");
-            })
+            .then(() => navigate("/"))
             .catch(err => {
                 console.log(err);
                 setTooltip({
@@ -179,7 +168,7 @@ export default function App() {
                 <Route path="/sign-up" element={<Register onRegister={handleRegister}/>}/>
                 <Route path="/sign-in" element={<Login onLogin={handleLogin}/>}/>
                 <Route path="/" element={
-                    <ProtectedRoute isLoggedIn={token}>
+                    <ProtectedRoute isLoggedIn={currentUser._id}>
                         <div className="page">
                             <Header>
                                 <p>{email}</p>

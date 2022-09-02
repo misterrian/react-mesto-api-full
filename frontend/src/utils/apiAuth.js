@@ -8,6 +8,7 @@ class ApiAuth {
         return fetch(`${this._baseUrl}/signup`, {
             method: 'POST',
             headers: this._headers,
+            credentials: 'include',
             body: JSON.stringify(user),
         })
             .then(res => this._checkResponse(res));
@@ -17,17 +18,16 @@ class ApiAuth {
         return fetch(`${this._baseUrl}/signin`, {
             method: 'POST',
             headers: this._headers,
+            credentials: 'include',
             body: JSON.stringify(user),
         })
             .then(res => this._checkResponse(res));
     }
 
-    checkToken(token) {
-        return fetch(`${this._baseUrl}/users/me`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
+    signout() {
+        return fetch(`${this._baseUrl}/signout`, {
+            headers: this._headers,
+            credentials: 'include',
         })
             .then(res => this._checkResponse(res));
     }
@@ -42,7 +42,6 @@ class ApiAuth {
 export const apiAuth = new ApiAuth({
     baseUrl: 'https://api.misterrian.mesto.nomoredomains.sbs',
     headers: {
-//        authorization: '9d97c63b-334e-41b1-ad1d-f8e460dd9ec6',
         'Content-Type': 'application/json',
     }
 });
