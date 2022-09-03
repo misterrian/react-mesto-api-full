@@ -88,7 +88,7 @@ export default function App() {
     function handleCardLike(event, card) {
         event.stopPropagation();
 
-        const isLiked = card.likes.some(like => like._id === currentUser._id);
+        const isLiked = card.likes.some(like => like === currentUser._id);
 
         api
             .changeLikeCardStatus(card._id, !isLiked)

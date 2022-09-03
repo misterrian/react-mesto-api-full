@@ -37,7 +37,7 @@ const login = (req, res, next) => {
         })
         .send({ message: 'OK' });
     })
-    .catch(() => next(new UnauthorizedError('Некорректный пользователь или пароль')));
+    .catch(next);
 };
 
 const createUser = (req, res, next) => {
